@@ -1,3 +1,23 @@
 This is a mirror of http://www.vim.org/scripts/script.php?script_id=3265
 
-Created for Code::Blocks theme (vimscript #3266) to highlight c operators.
+This plugin was initially created for codeblock_dark color theme (vimscript #3266) to highlight operators (+ - / * = <> () and others) in C-like languages. Why it's needed? Well, by default vim doesn't do that. After switching from Code::Block to vim I got really missed it.
+
+Then the plugin grew into something bigger. I started to use it to unify overal syntax highlighting for C-like languages.
+
+Screenshots:
+before http://www.vlasov.me/cSyntaxAfter-without.png
+after http://www.vlasov.me/cSyntaxAfter-with.png
+
+It's possible to extend the plugin tu support other C-like languages (Java, Go etc).
+For example for Object-C first check you don't have "objc" in autocmd in vimrc.
+Then create new objc.vim file in <cSyntaxAfter_path>/after/syntax/ and add:
+
+    if exists("*CSyntaxAfter")
+       call CSyntaxAfter()
+    endif
+
+Then add new rules to syntax highligting, for example to highlight [ ] brackets
+as operator and not constant add:
+
+    syntax match _Operator display "[\[\]]"
+    hi link _Operator Operator
