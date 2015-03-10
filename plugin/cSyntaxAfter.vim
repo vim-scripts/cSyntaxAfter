@@ -1,7 +1,7 @@
 " File: cSyntaxAfter.vim
 " Author: Sergey Vlasov <sergey@vlasov.me>
-" Last Change:  2012-04-02
-" Version:      0.2
+" Last Change: 2015-03-10
+" Version: 0.3
 ""
 " This plugin was initially created for codeblock_dark color theme to
 " highlight operators (+ - / * = <> () and others) in C-like languages.
@@ -11,23 +11,30 @@
 " Then the plugin grew into something bigger. I started to use it to unify
 " overal syntax highlighting for C-like languages.
 "
-" To enable the plugin it put this into your .vimrc:
+" There are two ways to enable the plugin:
 "
-"    autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,javascript} call CSyntaxAfter()
+"   1. If you want to use CSyntaxAfter highlighting as is, put this into your
+"   .vimrc:
 "
-" It's possible to extend the plugin tu support other C-like languages (Java, Go etc).
-" For example for Object-C first check you don't have "objc" in autocmd from above.
-" Then create new objc.vim file in <cSyntaxAfter_path>/after/syntax/ and add:
+"      autocmd! FileType c,cpp,java,php call CSyntaxAfter()
 "
-"    if exists("*CSyntaxAfter")
-"       call CSyntaxAfter()
-"    endif
+"   2. If you also want to extend the highlighting or add other C-like languages
+"   support (Java, Go etc), create a corresponding <filetype>.vim file in
+"   .vim/after/syntax/ and call CSyntaxAfter() from there instead.
 "
-" Then add new rules to syntax highligting, for example to highlight [ ] brackets
-" as operator and not constant add:
+"   WARNING: For same file type use either option (1.) or (2.), basically avoid calling
+"   CSyntaxAfter() more than once.
 "
-"    syntax match _Operator display "[\[\]]"
-"    hi link _Operator Operator
+"   For example, to distinguish "++" and "--" operator from "+" and "-" in C and C++,
+"   remove "c" and "cpp" from autocmd above and instead create .vim/after/syntax/c.vim
+"   with (cpp syntax is based on c):
+"
+"      if exists("*CSyntaxAfter")
+"         call CSyntaxAfter()
+"      endif
+"
+"      syntax match longOperators "++\|--"
+"      hi longOperators guifg=green guibg=red
 "
 
 function! CSyntaxAfter()
@@ -36,7 +43,7 @@ function! CSyntaxAfter()
 
 	syntax match _Block "[{}]"
 	syntax match _Bracket "[\[\]]"
-	syntax match _Operator display "[-+&|<>=!\/~.,;:*%&^?()]"
+	syntax match _Operator "[-+&|<>=!\/~.,;:*%&^?()]"
 	syntax region _Comment start="\/\*" end="\*\/"
 	syntax match _Comment "\/\/.*$"
 
